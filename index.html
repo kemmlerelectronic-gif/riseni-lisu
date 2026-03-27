@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<title>Přidání požadavku</title>
+<style>
+body{
+    font-family:Segoe UI,Arial;
+    background:#0b1220;
+    color:white;
+    margin:0;
+    padding:20px;
+    text-align:center;
+}
+input{
+    width:80%;
+    padding:10px;
+    margin:10px 0;
+    border-radius:6px;
+    border:none;
+}
+button{
+    padding:10px 20px;
+    background:#3b82f6;
+    border:none;
+    border-radius:8px;
+    color:white;
+    cursor:pointer;
+    font-size:16px;
+}
+.confirm{
+    margin-top:15px;
+    font-size:18px;
+    color:#22c55e;
+}
+</style>
+</head>
+<body>
+
+<h1>Přidat požadavek</h1>
+
+<input id="kontakt" placeholder="Číslo kontaktu">
+<input id="prurez" placeholder="Průřez">
+<input id="jmeno" placeholder="Jméno">
+
+<br>
+<button onclick="addRequest()">Přidat</button>
+
+<div id="confirm" class="confirm"></div>
+
+<script>
+function addRequest(){
+    const kontakt = document.getElementById("kontakt").value.trim();
+    const prurez = document.getElementById("prurez").value.trim();
+    const jmeno = document.getElementById("jmeno").value.trim();
+    
+    if(!kontakt || !prurez || !jmeno){
+        alert("Vyplň prosím všechna pole!");
+        return;
+    }
+
+    // Načteme existující požadavky
+    let pozadavky = JSON.parse(localStorage.getItem("pozadavky")) || [];
+
+    // Přidáme nový požadavek
+    pozadavky.push({kontakt, prurez, jmeno});
+
+    // Uložíme zpět do localStorage
+    localStorage.setItem("pozadavky", JSON.stringify(pozadavky));
+
+    // Trigger pro index.html
+    localStorage.setItem("pozadavky_update", Date.now());
+
+    // Vymažeme inputy
+    document.getElementById("kontakt").value = "";
+    document.getElementById("prurez").value = "";
+    document.getElementById("jmeno").value = "";
+
+    // Zobrazíme potvrzení
+    document.getElementById("confirm").innerText = "Požadavek přidán!";
+}
+
+// Volitelně vymazat potvrzení po pár sekundách
+setInterval(()=>document.getElementById("confirm").innerText="",5000);
+</script>
+
+</body>
+</html>
